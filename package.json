@@ -1,0 +1,26 @@
+{
+  "name": "ppi-trabalho-final-",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RafaelBorgesBrito/PPI-Trabalho-Final-.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RafaelBorgesBrito/PPI-Trabalho-Final-/issues"
+  },
+  "homepage": "https://github.com/RafaelBorgesBrito/PPI-Trabalho-Final-#readme",
+  "description": "",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1"
+  }
+}
