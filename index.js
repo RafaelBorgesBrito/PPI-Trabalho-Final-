@@ -84,9 +84,6 @@ app.get("/", (req, res) => {
     <div class="content-container">
       <form>
         <h1>Login</h1>
-        <div class="text-center mb-3">
-            <img src="img/volleyball-ball_7414515.png" alt="block" class="img-fluid" style="width: 100px; height: 100px;">
-          </div>
         <div class="mb-3">
           <label for="usuario" class="form-label">Usuário</label>
           <input type="text" class="form-control" id="usuario" name="usuario" required />
@@ -167,11 +164,6 @@ app.get("/menu", (req, res) => {
         color: #002a5e !important;
         transition: 0.3s ease;
         }
-        .logo-img {
-          width: 48px;
-          height: 48px;
-          margin-right: 10px;
-        }
         .content-container {
             display: block;
           justify-content: center;
@@ -212,7 +204,6 @@ app.get("/menu", (req, res) => {
       <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
           <a class="navbar-brand d-flex align-items-center" href="#">
-            <img src="img/volleyball_2501965.png" alt="Bola de Vôlei" class="logo-img">
             Voleibol FIPP
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
