@@ -52,7 +52,7 @@ app.get("/", (req, res) => {
       background-color: #002f6c;
       color: white;
       width: 100%;
-      max-width: 700px;
+      max-width: 800px;
       padding: 30px;
       border-radius: 15px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
@@ -82,15 +82,15 @@ app.get("/", (req, res) => {
 <body>
   <div class="main-wrapper">
     <div class="content-container">
-      <form>
+      <form method="POST" action="/">
         <h1>Login</h1>
         <div class="mb-3">
           <label for="usuario" class="form-label">Usuário</label>
-          <input type="text" class="form-control" id="usuario" name="usuario" required />
+          <input type="text" class="form-control" id="usuario" name="usuario" />
         </div>
         <div class="mb-3">
           <label for="senha" class="form-label">Senha</label>
-          <input type="password" class="form-control" id="senha" name="senha" required />
+          <input type="password" class="form-control" id="senha" name="senha"  />
         </div>
         <button type="submit" class="btn btn-primary">Entrar</button>
       </form>
@@ -116,7 +116,92 @@ app.get("/", (req, res) => {
         res.redirect("/");
     } else {
         res.send(`
-
+        <!DOCTYPE html>
+        <html lang="pt-br">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Voleibol Amador</title>
+          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
+          <style>
+            html, body {
+              height: 100%;
+              margin: 0;
+              background: linear-gradient(to right, #0057b7, #00cfff);
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            .main-wrapper {
+              height: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+            .content-container {
+              background-color: #002f6c;
+              color: white;
+              width: 100%;
+              max-width: 800px;
+              padding: 30px;
+              border-radius: 15px;
+              box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            .content-container h1 {
+              color: #ffcc00;
+              margin-bottom: 20px;
+              text-align: center;
+            }
+            .form-label {
+              color: #ffcc00;
+              font-weight: 500;
+            }
+            .btn-primary {
+              background-color: #ffcc00;
+              color: #002f6c;
+              border: none;
+              width: 100%;
+              margin-top: 15px;
+            }
+            .btn-primary:hover {
+              background-color: #ad8b00;
+              color: #183861;
+            }
+            .erro {
+                color: rgb(255, 179, 179);
+                text-shadow:
+                  0 0 2px #ff0000,
+                  0 0 3px #fc0606f5,
+                  0 0 4px #fa0707de,
+                  0 0 8px #ff0c0cb6,
+                  0 0 16px #ff1a1a93,
+                  0 0 32px #ff33336b,
+                  0 0 64px #ff4d4d60,
+                  0 0 128px #ff4d4d21;
+              }
+          </style>
+        </head>
+        <body>
+          <div class="main-wrapper">
+            <div class="content-container">
+              <form method="POST" action="/">
+                <h1>Login</h1>
+                <div class="mb-3">
+                  <label for="usuario" class="form-label">Usuário</label>
+                  <input type="text" class="form-control" id="usuario" name="usuario" />
+                </div>
+                <div class="mb-3">
+                  <label for="senha" class="form-label">Senha</label>
+                  <input type="password" class="form-control" id="senha" name="senha"  />
+                </div>
+                <div>
+                  <span class="erro">Usuário ou senha inválidos</span>
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+              </form>
+            </div>
+          </div>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+        </body>
+        </html>
         `); 
         res.end();   
     }
