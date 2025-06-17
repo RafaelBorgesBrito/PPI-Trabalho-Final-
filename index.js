@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 const porta = 3001;
 const host = "localhost";
 const app = express();
-var listaProdutos = [];
+var lista_de_times = [];
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -113,7 +113,7 @@ app.get("/", (req, res) => {
         const data = new Date();
         res.cookie("ultimoLogin", data.toLocaleString(), { maxAge: 1000 * 60 * 60 * 24 * 30,});
         res.cookie("usuario", usuario, { maxAge: 1000 * 60 * 60 * 24 * 30 });
-        res.redirect("/");
+        res.redirect("/menu");
     } else {
         res.send(`
         <!DOCTYPE html>
@@ -301,7 +301,7 @@ app.get("/menu", (req, res) => {
                       Menu de Cadastros
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="#">Cadastro de Equipe/Time</a></li>
+                      <li><a class="dropdown-item" href="/cadastro-de-time">Cadastro de Equipe/Time</a></li>
                       <li><a class="dropdown-item" href="#">Cadastro de Jogador</a></li>
                     </ul>
                   </li>
@@ -310,7 +310,7 @@ app.get("/menu", (req, res) => {
                       Menu de Listas
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="#">Lista de Equipes/Times</a></li>
+                      <li><a class="dropdown-item" href="/lista-de-times">Lista de Equipes/Times</a></li>
                       <li><a class="dropdown-item" href="#">Lista de Jogadores</a></li>
                     </ul>
                   </li>
@@ -329,9 +329,9 @@ app.get("/menu", (req, res) => {
       </nav>
       <div class="content-container">
         <h1>Escolha uma opção para cadastrar:</h1>
-        <a class="btn btn-warning" href="">Cadastrar Equipe/Time</a>
+        <a class="btn btn-warning" href="/cadastro-de-time">Cadastrar Equipe/Time</a>
         <a class="btn btn-warning" href="">Cadastrar Jogador</a>
-        <a class="btn btn-warning" href="">Lista de Equipes/Times</a>
+        <a class="btn btn-warning" href="/lista-de-times">Lista de Equipes/Times</a>
         <a class="btn btn-warning" href="">Lista de Jogadores</a>
       </div>
       <footer>
@@ -344,9 +344,580 @@ app.get("/menu", (req, res) => {
     res.end();
 });
 
-app.get("/logout", (requisicao, resposta) => {
-    requisicao.session.destroy();
-    resposta.redirect("/login");
+app.get("/cadastro-de-time", verautc , (req, res) => {
+  res.send(`
+  <!DOCTYPE html>
+  <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voleibol Amador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        background: linear-gradient(to right, #0057b7, #00cfff);
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .navbar {
+        background-color: #0066ec !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+      .navbar-brand, .nav-link {
+        color: #fff !important;
+        font-weight: 600;
+        transition: color 0.3s ease;
+        margin: 5px;
+      }
+      .nav-link {
+        border: 1px solid #002a5e;
+        border-radius: 5px;
+        background-color: #002a5e;
+      }
+      .navbar-brand:hover, .nav-link:hover {
+        color: #ffcc00 !important;
+      }
+      .navbar .dropdown-toggle:hover {
+        background-color: #ffcc00 !important;
+        color: #002a5e !important;
+        transition: 0.3s ease;
+      }
+      .main-wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 100px 15px 140px; /* espaçamento para não encobrir o footer */
+      }
+      .content-container {
+        background-color: #002f6c;
+        border: #183861 2px solid;
+        color: white;
+        width: 100%;
+        max-width: 800px;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px #2b2200;
+        text-align: center;
+      }
+      .content-container h1 {
+        color: #ffcc00;
+        margin-bottom: 30px;
+      }
+      .form-label {
+        color: #ffcc00;
+        font-weight: 500;
+      }
+      .btn-primary {
+        background-color: #ffcc00;
+        color: #002f6c;
+        border: none;
+        width: 100%;
+        margin-top: 15px;
+      }
+      .btn-primary:hover {
+        background-color: #ad8b00;
+        color: #183861;
+      }
+      footer {
+        text-align: center;
+        background-color: #002a5e;
+        color: rgb(202, 202, 202);
+        width: 100%;
+        padding: 15px 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          Voleibol FIPP
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle btn btn-outline-light fw-semibold px-3 py-2 rounded" href="/menu" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #004fc4; border: none;">
+                Menu de Cadastros
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="/cadastro-de-time">Cadastro de Equipe/Time</a></li>
+                <li><a class="dropdown-item" href="#">Cadastro de Jogador</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle btn btn-outline-light fw-semibold px-3 py-2 rounded" href="/menu" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #004fc4; border: none;">
+                Menu de Listas
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="/lista-de-times">Lista de Equipes/Times</a></li>
+                <li><a class="dropdown-item" href="#">Lista de Jogadores</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            <li class="nav-item">
+              <p class="nav-link mb-0">${req.cookies.ultimoLogin ? "Último Login: " + req.cookies.ultimoLogin : ""}</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="main-wrapper">
+      <div class="content-container">
+        <h1>Cadastrar Equipe/Time</h1>
+        <form method="POST" action="/cadastro-de-time">
+          <div class="mb-3">
+            <label for="time" class="form-label">Nome da Equipe/Time</label>
+            <input type="text" class="form-control" id="time" name="time" />
+          </div>
+          <div class="mb-3">
+            <label for="responsavel" class="form-label">Nome do Responsável</label>
+            <input type="text" class="form-control" id="responsavel" name="responsavel" />
+          </div>
+          <div class="mb-3">
+            <label for="telefone" class="form-label">Telefone</label>
+            <input type="tel" class="form-control" id="telefone" name="telefone" />
+          </div>
+          <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </form>
+      </div>
+    </div>
+    <footer>
+      <p>2025 Voleibol FIPP | Todos os direitos reservados</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+  </html>  
+  `);  
+  res.end();
+});
+
+app.post("/cadastro-de-time", verautc , (req, res) => {
+    const time = req.body.time;
+    const responsavel = req.body.responsavel;
+    const telefone = req.body.telefone;
+    
+    if(time && responsavel && telefone) {
+      lista_de_times.push({
+          time: time,
+          responsavel: responsavel,
+          telefone: telefone
+      });
+      
+      
+      res.redirect("/lista-de-times");
+  } else {
+
+
+    let conteudo = `
+    <!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Voleibol Amador</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
+      <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+          min-height: 100%;
+          background: linear-gradient(to right, #0057b7, #00cfff);
+          color: #fff;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar {
+          background-color: #0066ec !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .navbar-brand, .nav-link {
+          color: #fff !important;
+          font-weight: 600;
+          transition: color 0.3s ease;
+          margin: 5px;
+        }
+        .nav-link {
+          border: 1px solid #002a5e;
+          border-radius: 5px;
+          background-color: #002a5e;
+        }
+        .navbar-brand:hover, .nav-link:hover {
+          color: #ffcc00 !important;
+        }
+        .navbar .dropdown-toggle:hover {
+          background-color: #ffcc00 !important;
+          color: #002a5e !important;
+          transition: 0.3s ease;
+        }
+        .main-wrapper {
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          padding: 100px 15px 140px; /* espaçamento para não encobrir o footer */
+        }
+        .content-container {
+          background-color: #002f6c;
+          border: #183861 2px solid;
+          color: white;
+          width: 100%;
+          max-width: 800px;
+          padding: 30px;
+          border-radius: 15px;
+          box-shadow: 0 10px 25px #2b2200;
+          text-align: center;
+        }
+        .content-container h1 {
+          color: #ffcc00;
+          margin-bottom: 30px;
+        }
+        .form-label {
+          color: #ffcc00;
+          font-weight: 500;
+        }
+        .btn-primary {
+          background-color: #ffcc00;
+          color: #002f6c;
+          border: none;
+          width: 100%;
+          margin-top: 15px;
+        }
+        .btn-primary:hover {
+          background-color: #ad8b00;
+          color: #183861;
+        }
+        footer {
+          text-align: center;
+          background-color: #002a5e;
+          color: rgb(202, 202, 202);
+          width: 100%;
+          padding: 15px 10px;
+        }
+        .erro {
+          color: rgb(255, 179, 179);
+          text-shadow:
+            0 0 2px #ff0000,
+            0 0 3px #fc0606f5,
+            0 0 4px #fa0707de,
+            0 0 8px #ff0c0cb6,
+            0 0 16px #ff1a1a93,
+            0 0 32px #ff33336b,
+            0 0 64px #ff4d4d60,
+            0 0 128px #ff4d4d21;
+        }
+      </style>
+    </head>
+    <body>
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <a class="navbar-brand d-flex align-items-center" href="#">
+            Voleibol FIPP
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle btn btn-outline-light fw-semibold px-3 py-2 rounded" href="/menu" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #004fc4; border: none;">
+                  Menu de Cadastros
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="/cadastro-de-time">Cadastro de Equipe/Time</a></li>
+                  <li><a class="dropdown-item" href="#">Cadastro de Jogador</a></li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle btn btn-outline-light fw-semibold px-3 py-2 rounded" href="/menu" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #004fc4; border: none;">
+                  Menu de Listas
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="/lista-de-times">Lista de Equipes/Times</a></li>
+                  <li><a class="dropdown-item" href="#">Lista de Jogadores</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+              </li>
+              <li class="nav-item">
+                <p class="nav-link mb-0">${req.cookies.ultimoLogin ? "Último Login: " + req.cookies.ultimoLogin : ""}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="main-wrapper">
+        <div class="content-container">
+          <h1>Cadastrar Equipe/Time</h1>
+          <form method="POST" action="/cadastro-de-time">
+    `;
+    if(!time){
+      conteudo+=`
+      <div class="mb-3">
+            <label for="time" class="form-label">Nome da Equipe/Time</label>
+            <input type="text" class="form-control" id="time" name="time" />
+            <span class="erro">Nome do Time Invalido</span>
+          </div>
+      `;
+    }else{
+       conteudo +=`
+       <div class="mb-3">
+            <label for="time" class="form-label">Nome da Equipe/Time</label>
+            <input type="text" class="form-control" id="time" name="time" />
+          </div>
+       `;
+    }
+    if(!responsavel){
+      conteudo+=`
+      <div class="mb-3">
+      <label for="responsavel" class="form-label">Nome do Responsável</label>
+      <input type="text" class="form-control" id="responsavel" name="responsavel" />
+      <span class="erro">Nome do Responsável Invalido</span>
+      </div>
+      `;
+    }else{
+      conteudo+=`
+      <div class="mb-3">
+      <label for="responsavel" class="form-label">Nome do Responsável</label>
+      <input type="text" class="form-control" id="responsavel" name="responsavel" />
+    </div>
+      `;
+    }
+    if(!telefone){
+     conteudo+=`
+     <div class="mb-3">
+     <label for="telefone" class="form-label">Telefone</label>
+     <input type="tel" class="form-control" id="telefone" name="telefone" />
+     <span class="erro">Telefone Invalido</span>
+   </div>
+     `;
+    }else{
+      conteudo+=`
+      <div class="mb-3">
+      <label for="telefone" class="form-label">Telefone</label>
+      <input type="tel" class="form-control" id="telefone" name="telefone" />
+    </div>`;
+    }  
+    conteudo+=`
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </form>
+      </div>
+    </div>
+    <footer>
+      <p>2025 Voleibol FIPP | Todos os direitos reservados</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+  </html>  
+    `;
+    res.send(conteudo);
+    res.end();
+  }
+});
+
+app.get("/lista-de-times", verautc , (req, res) => {
+    let conteudo = `
+    <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voleibol Amador</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: linear-gradient(to right, #0057b7, #00cfff);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .navbar {
+      background-color: #0066ec !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      margin: 5px;
+    }
+    .nav-link {
+      border: 1px solid #002a5e;
+      border-radius: 5px;
+      background-color: #002a5e;
+    }
+    .navbar-brand:hover, .nav-link:hover {
+      color: #ffcc00 !important;
+    }
+    .navbar .dropdown-toggle:hover {
+      background-color: #ffcc00 !important;
+      color: #002a5e !important;
+      transition: 0.3s ease;
+    }
+    .main-wrapper {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 100px 15px 140px; /* espaçamento para não encobrir o footer */
+    }
+    .content-container {
+      background-color: #002f6c;
+      border: #183861 2px solid;
+      color: white;
+      width: 100%;
+      max-width: 800px;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px #2b2200;
+      text-align: center;
+    }
+    .content-container h1 {
+      color: #ffcc00;
+      margin-bottom: 30px;
+    }
+    .btn-primary {
+      background-color:#0066ec;
+      color: whitesmoke;
+      border: none;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .btn-primary:hover {
+      background-color: #ad8b00;
+      color: #183861;
+    }
+    footer {
+      text-align: center;
+      background-color: #002a5e;
+      color: rgb(202, 202, 202);
+      width: 100%;
+      padding: 15px 10px;
+    }
+    .minha-tabela {
+        background-color: #ffcc00 !important; 
+        color: #002a5e !important;            
+        border: 2px solid white !important;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+    .minha-tabela th{
+    background-color: #ffde5a !important; 
+    color: #002a5e !important;
+    border: 1px solid white;
+    text-align: center;
+    font-weight: 600;
+    }
+    .minha-tabela td{
+    background-color: #ffcc00 !important; 
+    color: #002a5e !important;
+    border: 1px solid white;
+    text-align: center;
+    font-weight: 600; 
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        Voleibol FIPP
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle btn btn-outline-light fw-semibold px-3 py-2 rounded" href="/menu" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #004fc4; border: none;">
+              Menu de Cadastros
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#">Cadastro de Equipe/Time</a></li>
+              <li><a class="dropdown-item" href="#">Cadastro de Jogador</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle btn btn-outline-light fw-semibold px-3 py-2 rounded" href="/menu" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #004fc4; border: none;">
+              Menu de Listas
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/lista-de-times">Lista de Equipes/Times</a></li>
+              <li><a class="dropdown-item" href="#">Lista de Jogadores</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+          <li class="nav-item">
+            <p class="nav-link mb-0">${req.cookies.ultimoLogin ? "Último Login: " + req.cookies.ultimoLogin : ""}</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="main-wrapper">
+  <div class="content-container">
+    <h1>Lista de Equipe/Time</h1>
+    <div class="table-responsive">
+      <table class="table minha-tabela">
+        <thead>
+          <tr>
+            <th>Equipe/Time:</th>
+            <th>Responsável:</th>
+            <th>Telefone:</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+for(let i = 0; i < lista_de_times.length; i++) {
+  conteudo += `
+          <tr>
+              <td>${lista_de_times[i].time}</td>
+              <td>${lista_de_times[i].responsavel}</td>
+              <td>${lista_de_times[i].telefone}</td>
+          </tr>`;
+}
+
+conteudo += `
+        </tbody>
+      </table>
+      <a href="/cadastro-de-time" class="btn btn-primary">Cadastrar Mais</a>
+      <a href="/menu" class="btn btn-primary">Retornar ao Menu</a>
+    </div>
+  </div>
+</div>
+<footer>
+  <p>2025 Voleibol FIPP | Todos os direitos reservados</p>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>`;
+
+res.send(conteudo);
+res.end();
+
 });
 
 const servidor = http.createServer(app);
