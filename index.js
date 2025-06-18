@@ -208,7 +208,7 @@ app.get("/", (req, res) => {
     }
 });
 
-app.get("/menu", (req, res) => {
+app.get("/menu",verautc , (req, res) => {
     
     res.send(`  
     <!DOCTYPE html>
