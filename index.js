@@ -289,7 +289,7 @@ app.get("/menu",verautc , (req, res) => {
     <body>
       <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-          <a class="navbar-brand d-flex align-items-center" href="#">
+          <a class="navbar-brand d-flex align-items-center" href="/menu">
             Voleibol FIPP
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -346,6 +346,8 @@ app.get("/menu",verautc , (req, res) => {
 });
 
 app.get("/cadastro-de-time", verautc , (req, res) => {
+  
+
   res.send(`
   <!DOCTYPE html>
   <html lang="pt-br">
@@ -435,7 +437,7 @@ app.get("/cadastro-de-time", verautc , (req, res) => {
   <body>
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="#">
+        <a class="navbar-brand d-flex align-items-center" href="/menu">
           Voleibol FIPP
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -620,7 +622,7 @@ app.post("/cadastro-de-time", verautc , (req, res) => {
     <body>
       <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-          <a class="navbar-brand d-flex align-items-center" href="#">
+          <a class="navbar-brand d-flex align-items-center" href="/menu">
             Voleibol FIPP
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -837,7 +839,7 @@ app.get("/lista-de-times", verautc , (req, res) => {
 <body>
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand d-flex align-items-center" href="#">
+      <a class="navbar-brand d-flex align-items-center" href="/menu">
         Voleibol FIPP
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -1129,8 +1131,70 @@ app.post("/cadastro-de-jogador", verautc , (req, res) => {
     const sexo = req.body.sexo;
     const posicao = req.body.posicao;
     const time_do_jogador = req.body.time_do_jogador;
-    
+    let jogadoresNoTime = 0;
     if(nome && numero && data && altura && sexo && posicao && time_do_jogador) {
+      for (let i = 0; i < lista_de_jogadores.length; i++) {
+        if (lista_de_jogadores[i].time_do_jogador === time_do_jogador) {
+            jogadoresNoTime++;
+        }}
+        if(jogadoresNoTime >= 6){
+          let conteudo2 = `
+          <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Time Cheio</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #001f3f, #004080);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .card {
+      background-color: #012a4a;
+      border: none;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+      max-width: 500px;
+      width: 100%;
+    }
+    .card h1 {
+      color: red;
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+    .card p {
+      color: #ffcc00;
+      font-size: 1.2rem;
+    }
+    .btn-warning {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Time Cheio!</h1>
+    <p>O time <strong>${time_do_jogador}</strong> já possui o limite de <strong>6 jogadores</strong>.</p>
+    <a href="/cadastro-de-jogador" class="btn btn-warning">Voltar ao Cadastro</a>
+  </div>
+</body>
+</html>
+
+          `;
+          res.send(conteudo2);
+          return;
+        }
       lista_de_jogadores.push({
         nome: nome,
         numero: numero,
@@ -1187,7 +1251,7 @@ app.post("/cadastro-de-jogador", verautc , (req, res) => {
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 100px 15px 140px; /* espaçamento para não encobrir o footer */
+            padding: 100px 15px 140px; 
           }
           .content-container {
             background-color: #002f6c;
@@ -1397,27 +1461,29 @@ app.post("/cadastro-de-jogador", verautc , (req, res) => {
     }
     if(!time_do_jogador){
       conteudo+=`
- <div class="mb-3">
- <label for="time_do_jogador" class="form-label">Equipe/Time:</label>
- <select id="time_do_jogador" name="time_do_jogador" class="form-select">
- `;
- if(lista_de_times.length<= 0){
-   conteudo+=`
-            <option value="">Sem Times Cadastrados</option>
-   `;
-   
- }else{
-  for(let i = 0; i < lista_de_times.length; i++) {
-    conteudo+= `
-        <option value="${lista_de_times[i].time}">${lista_de_times[i].time}</option>
-    `;
-  }
- }
- conteudo+=`
- </select>
- <span class="erro">Time Invalido</span>
- </div>
- `;
+      <div class="mb-3">
+      <label for="time_do_jogador" class="form-label">Equipe/Time:</label>
+      <select id="time_do_jogador" name="time_do_jogador" class="form-select">
+      `;
+      if(lista_de_times.length<= 0){
+        conteudo+=`
+                  <option value="">Sem Times Cadastrados</option>
+        `;
+        
+      }else{
+        for(let i = 0; i < lista_de_times.length; i++) {
+          conteudo+= `
+              <option value="${lista_de_times[i].time}">${lista_de_times[i].time}</option>
+          `;
+        }
+      }
+      conteudo+=`
+      </select>
+      <span class="erro">Time Invalido</span>
+      </div>
+      `;
+
+
     }else{
       conteudo+=`
       <div class="mb-3">
@@ -1648,7 +1714,7 @@ app.post("/cadastro-de-jogador", verautc , (req, res) => {
     <body>
       <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-          <a class="navbar-brand d-flex align-items-center" href="#">Voleibol FIPP</a>
+          <a class="navbar-brand d-flex align-items-center" href="/menu">Voleibol FIPP</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
           </button>
