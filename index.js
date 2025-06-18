@@ -329,6 +329,7 @@ app.get("/menu",verautc , (req, res) => {
         </div>
       </nav>
       <div class="content-container">
+         <p>${req.cookies.ultimoLogin ? "Último Login: " + req.cookies.ultimoLogin : ""}</p>
         <h1>Escolha uma opção para cadastrar:</h1>
         <a class="btn btn-warning" href="/cadastro-de-time">Cadastrar Equipe/time</a>
         <a class="btn btn-warning" href="/cadastro-de-jogador">Cadastrar Jogador</a>
