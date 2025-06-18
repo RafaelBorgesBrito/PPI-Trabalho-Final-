@@ -312,7 +312,7 @@ app.get("/menu", (req, res) => {
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                       <li><a class="dropdown-item" href="/lista-de-times">Lista de Equipes/Times</a></li>
-                      <li><a class="dropdown-item" href="#">Lista de Jogadores</a></li>
+                      <li><a class="dropdown-item" href="/lista_de_jogadores">Lista de Jogadores</a></li>
                     </ul>
                   </li>
               <li class="nav-item">
@@ -333,7 +333,7 @@ app.get("/menu", (req, res) => {
         <a class="btn btn-warning" href="/cadastro-de-time">Cadastrar Equipe/time</a>
         <a class="btn btn-warning" href="/cadastro-de-jogador">Cadastrar Jogador</a>
         <a class="btn btn-warning" href="/lista-de-times">Lista de Equipes/times</a>
-        <a class="btn btn-warning" href="">Lista de Jogadores</a>
+        <a class="btn btn-warning" href="/lista_de_jogadores">Lista de Jogadores</a>
       </div>
       <footer>
            <p>2025 Voleibol FIPP | Todos os direitos reservados</p>
@@ -391,7 +391,7 @@ app.get("/cadastro-de-time", verautc , (req, res) => {
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        padding: 100px 15px 140px; /* espaçamento para não encobrir o footer */
+        padding: 100px 15px 140px; 
       }
       .content-container {
         background-color: #002f6c;
@@ -458,7 +458,7 @@ app.get("/cadastro-de-time", verautc , (req, res) => {
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="/lista-de-times">Lista de Equipes/Times</a></li>
-                <li><a class="dropdown-item" href="#">Lista de Jogadores</a></li>
+                <li><a class="dropdown-item" href="/lista_de_jogadores">Lista de Jogadores</a></li>
               </ul>
             </li>
             <li class="nav-item">
@@ -564,7 +564,7 @@ app.post("/cadastro-de-time", verautc , (req, res) => {
           display: flex;
           justify-content: center;
           align-items: flex-start;
-          padding: 100px 15px 140px; /* espaçamento para não encobrir o footer */
+          padding: 100px 15px 140px; 
         }
         .content-container {
           background-color: #002f6c;
@@ -643,7 +643,7 @@ app.post("/cadastro-de-time", verautc , (req, res) => {
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                   <li><a class="dropdown-item" href="/lista-de-times">Lista de Equipes/Times</a></li>
-                  <li><a class="dropdown-item" href="#">Lista de Jogadores</a></li>
+                  <li><a class="dropdown-item" href="/lista_de_jogadores">Lista de Jogadores</a></li>
                 </ul>
               </li>
               <li class="nav-item">
@@ -860,7 +860,7 @@ app.get("/lista-de-times", verautc , (req, res) => {
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li><a class="dropdown-item" href="/lista-de-times">Lista de Equipes/Times</a></li>
-              <li><a class="dropdown-item" href="#">Lista de Jogadores</a></li>
+              <li><a class="dropdown-item" href="/lista_de_jogadores">Lista de Jogadores</a></li>
             </ul>
           </li>
           <li class="nav-item">
@@ -965,7 +965,7 @@ app.get("/cadastro-de-jogador", verautc, (req, res) => {
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 100px 15px 140px; /* espaçamento para não encobrir o footer */
+      padding: 100px 15px 140px; 
     }
     .content-container {
       background-color: #002f6c;
@@ -1032,7 +1032,7 @@ app.get("/cadastro-de-jogador", verautc, (req, res) => {
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li><a class="dropdown-item" href="/lista-de-times">Lista de Equipes/Times</a></li>
-              <li><a class="dropdown-item" href="#">Lista de Jogadores</a></li>
+              <li><a class="dropdown-item" href="/lista_de_jogadores">Lista de Jogadores</a></li>
             </ul>
           </li>
           <li class="nav-item">
@@ -1266,7 +1266,7 @@ app.post("/cadastro-de-jogador", verautc , (req, res) => {
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="/lista-de-times">Lista de Equipes/Times</a></li>
-                    <li><a class="dropdown-item" href="#">Lista de Jogadores</a></li>
+                    <li><a class="dropdown-item" href="/lista_de_jogadores">Lista de Jogadores</a></li>
                   </ul>
                 </li>
                 <li class="nav-item">
